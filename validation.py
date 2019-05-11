@@ -1,19 +1,22 @@
 """Provides validation functions."""
 
-def validate(number):
-    """Validates provided number.
-    
+
+def validate(provided_value=''):
+    """Validates provided value.
     Args:
-        number (int): number to be validated.
+        provided_value (str): value to be validated.
 
     Raises:
-        AssertionError if number is invalid.
+        AssertionError if value is invalid.
     """
-    number = str(number).strip()
+    try:
+        # prevent None and make sure it is a number
+        int(str(provided_value))
+    except ValueError:
+        raise AssertionError('You must provide a number.')
 
-    assert len(number) == 4, \
+    assert len(provided_value) == 4, \
         "Number should have 4 digits."
 
-    assert all(number.count(digit) == 1 for digit in number), \
+    assert all(provided_value.count(digit) == 1 for digit in provided_value), \
         "Digits shouldn't be repeated."
-        

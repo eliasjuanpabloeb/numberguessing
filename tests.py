@@ -1,19 +1,32 @@
-import unittest
+from unittest import main, TestCase
 from validation import validate
 
 
-class ValidationTests(unittest.TestCase):
+class ValidationTests(TestCase):
     def test_validate(self):
-        with self.assertRaises(AssertionError) as cm:
-            validate(123)
-        self.assertEqual(cm.exception.args[0], "Number should have 4 digits.")
+        invalid_type = ['', ' ', None, 'hola']
+        for elem in invalid_type:
+            with self.assertRaises(AssertionError) as cm:
+                validate(elem)
+            self.assertEqual(cm.exception.args[0],
+                             "You must provide a number.")
 
-        with self.assertRaises(AssertionError) as cm:
-            validate(1122)
-        self.assertEqual(cm.exception.args[0], "Digits shouldn't be repeated.")
+        invalid_size = ['12', '0', '432', '22', '112442']
+        for elem in invalid_size:
+            with self.assertRaises(AssertionError) as cm:
+                validate(elem)
+            self.assertEqual(cm.exception.args[0],
+                             "Number should have 4 digits.")
 
-        validate(4321)
+        invalid_repeated = ['1111', '1231', '3212', '4442', '1123']
+        for elem in invalid_repeated:
+            with self.assertRaises(AssertionError) as cm:
+                validate(elem)
+            self.assertEqual(cm.exception.args[0],
+                             "Digits shouldn't be repeated.")
+
+        validate('4321')
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    main(verbosity=2)
