@@ -1,5 +1,6 @@
-from unittest import main, TestCase
+from unittest import main, mock, TestCase
 from validation import validate
+from games import HumanGuessingGame
 
 
 class ValidationTests(TestCase):
@@ -26,6 +27,38 @@ class ValidationTests(TestCase):
                              "Digits shouldn't be repeated.")
 
         validate('4321')
+
+
+class HumanGuessingGameTest(TestCase):
+    def test_get_secret_value(self):
+        game = HumanGuessingGame()
+        secret_number = game.get_secret_value()
+        validate(secret_number)
+
+    def test_get_guess(self):
+        INPUT_VALUE = '123'
+        game = HumanGuessingGame()
+        guess = None
+        with mock.patch('builtins.input', return_value=INPUT_VALUE):
+            guess = game.get_guess()
+            self.assertEqual(guess, INPUT_VALUE)
+
+    def test_check_guess(self):
+        game = HumanGuessingGame()
+
+        # Guesses perfectly
+        result = game.check_guess(game.secret_value)
+        self.assertEqual(result, {'good': 4, 'regular': 0})
+
+        # 1 good and 1 regular
+        game.secret_value = '1234'
+        result = game.check_guess('1526')
+        self.assertEqual(result, {'good': 1, 'regular': 1})
+
+        # All wrong
+        game.secret_value = '1234'
+        result = game.check_guess('4321')
+        self.assertEqual(result, {'good': 0, 'regular': 4})
 
 
 if __name__ == '__main__':
