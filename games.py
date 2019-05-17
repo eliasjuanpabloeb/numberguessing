@@ -3,7 +3,7 @@ from validation import validate
 
 
 class HumanGuessingGame:
-    """CPU generates a secret number and human tries to guess it."""
+    """Game where CPU generates a secret number and human tries to guess it."""
     def __init__(self):
         self.is_over = True
         self.secret_value = self.get_secret_value()
@@ -21,16 +21,19 @@ class HumanGuessingGame:
 
     def check_guess(self, guess):
         """Checks whether the player's guess is correct."""
-        result = {'good': 0, 'regular': 0}
+        results = {'good': 0, 'regular': 0}
         secret_digits = list(self.secret_value)
         guess_digits = list(guess)
         for secret_digit, guess_digit in zip(secret_digits, guess_digits):
             if guess_digit == secret_digit:
-                result['good'] += 1
+                results['good'] += 1
             elif guess_digit in secret_digits:
-                result['regular'] += 1
+                results['regular'] += 1
 
-        return result
+        return results
+
+    def show_results(self, results):
+        print('Good: {0}\nRegular: {1}\n'.format(results['good'], results['regular']))
 
     def play(self):
         """Starts the game and checks if it finished."""
@@ -42,8 +45,13 @@ class HumanGuessingGame:
             except AssertionError as e:
                 print('Oops! ', e.args[0])
                 continue
-            result = self.check_guess(guess)
-            print(result)
-            if result['good'] == 4:
-                print('You won!')
+            results = self.check_guess(guess)
+            self.show_results(results)
+            if results['good'] == 4:
+                print('You win! Game over')
                 self.is_over = True
+
+
+if __name__ == '__main__':
+    game = HumanGuessingGame()
+    game.play()
