@@ -3,6 +3,17 @@ import itertools
 from validation import validate
 
 
+def calculate_score(guess, expected):
+    results = {'good': 0, 'regular': 0}
+    for guess_digit, expected_digit in zip(guess, expected):
+        if guess_digit == expected_digit:
+            results['good'] += 1
+        elif guess_digit in expected:
+            results['regular'] += 1
+
+    return results
+
+
 class HumanGuessingGame:
     """Game where CPU generates a secret number and human tries to guess it."""
     def __init__(self):
@@ -22,19 +33,11 @@ class HumanGuessingGame:
 
     def check_guess(self, guess):
         """Checks whether the player's guess is correct."""
-        results = {'good': 0, 'regular': 0}
-        secret_digits = list(self.secret_value)
-        guess_digits = list(guess)
-        for secret_digit, guess_digit in zip(secret_digits, guess_digits):
-            if guess_digit == secret_digit:
-                results['good'] += 1
-            elif guess_digit in secret_digits:
-                results['regular'] += 1
-
-        return results
+        return calculate_score(guess, self.secret_value)
 
     def show_results(self, results):
-        print('Good: {0}\nRegular: {1}\n'.format(results['good'], results['regular']))
+        print('Good: {0}\nRegular: {1}\n'
+              .format(results['good'], results['regular']))
 
     def play(self):
         """Starts the game and checks if it finished."""
@@ -74,6 +77,9 @@ class CPUGuessingGame:
         good = int(input('Good: '))
         regular = int(input('Regular: '))
         return {'good': good, 'regular': regular}
+
+    def play(self):
+        pass
 
 
 if __name__ == '__main__':

@@ -61,6 +61,7 @@ class HumanGuessingGameTest(TestCase):
         self.assertEqual(result, {'good': 0, 'regular': 4})
 
     def test_play(self):
+        # TODO: use mock decorators and test the whole game
         pass
 
 
@@ -84,6 +85,7 @@ class CPUGuessingGameTest(TestCase):
         self.assertEqual(result, {'good': 1, 'regular': 1})
 
     def test_play(self):
+        # TODO: use mock decorators and test the whole game
         pass
 
 
