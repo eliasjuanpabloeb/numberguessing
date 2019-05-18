@@ -92,5 +92,20 @@ class CPUGuessingGame:
 
 
 if __name__ == '__main__':
-    game = CPUGuessingGame()
+    game = None
+    game_type = None
+    message = """
+    Welcome to Guess The Number!
+    Please select a game mode:
+        [0] You guess the CPU's secret number.
+        [1] The CPU guesses yours.
+
+    Your choice: """
+
+    while game_type not in (0, 1):
+        game_type = int(input(message))
+    if game_type == 0:
+        game = HumanGuessingGame()
+    elif game_type == 1:
+        game = CPUGuessingGame()
     game.play()
