@@ -58,6 +58,7 @@ class HumanGuessingGame:
 
 class CPUGuessingGame:
     def __init__(self):
+        self.is_over = True
         self.choices = self.get_possible_permutations()
 
     def get_possible_permutations(self):
@@ -74,14 +75,22 @@ class CPUGuessingGame:
     def check_guess(self, guess):
         """Asks the human the guess score."""
         print('My guess is {}'.format(guess))
-        good = int(input('Good: '))
-        regular = int(input('Regular: '))
+        response = input('Score: ')
+        good, regular = [int(x) for x in response.split(',')]
         return {'good': good, 'regular': regular}
 
     def play(self):
-        pass
+        """Starts the game and checks if it finished."""
+        self.is_over = False
+        while not self.is_over:
+            guess = self.get_guess()
+            results = self.check_guess(guess)
+            if results['good'] == 4:
+                print('Game over')
+                self.is_over = True
+            self.choices = [x for x in self.choices if calculate_score(x, guess) == results]
 
 
 if __name__ == '__main__':
-    game = HumanGuessingGame()
+    game = CPUGuessingGame()
     game.play()
