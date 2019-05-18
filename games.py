@@ -1,4 +1,5 @@
 import random
+import itertools
 from validation import validate
 
 
@@ -50,6 +51,29 @@ class HumanGuessingGame:
             if results['good'] == 4:
                 print('You win! Game over')
                 self.is_over = True
+
+
+class CPUGuessingGame:
+    def __init__(self):
+        self.choices = self.get_possible_permutations()
+
+    def get_possible_permutations(self):
+        """Gets a shuffled list of all possible valid permutations."""
+        digits = [str(x) for x in range(10)]
+        result = list(itertools.permutations(digits, 4))
+        random.shuffle(result)
+        return result
+
+    def get_guess(self):
+        """Gets the first possible guess."""
+        return ''.join(self.choices[0])
+
+    def check_guess(self, guess):
+        """Asks the human the guess score."""
+        print('My guess is {}'.format(guess))
+        good = int(input('Good: '))
+        regular = int(input('Regular: '))
+        return {'good': good, 'regular': regular}
 
 
 if __name__ == '__main__':
