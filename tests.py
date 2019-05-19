@@ -1,6 +1,7 @@
 from unittest import main, mock, TestCase
 from validation import validate
 from games import HumanGuessingGame, CPUGuessingGame
+from constants import NUMBER_SIZE
 
 
 class ValidationTests(TestCase):

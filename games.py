@@ -1,6 +1,7 @@
 import random
 import itertools
 from validation import validate
+from constants import NUMBER_SIZE
 
 
 def calculate_score(guess, expected):
@@ -23,7 +24,7 @@ class HumanGuessingGame:
     def get_secret_value(self):
         """Generates a random valid value and returns it."""
         digits = [str(x) for x in range(10)]
-        secret_value = ''.join(random.sample(digits, k=4))
+        secret_value = ''.join(random.sample(digits, k=NUMBER_SIZE))
         return secret_value
 
     def get_guess(self):
@@ -51,7 +52,7 @@ class HumanGuessingGame:
                 continue
             results = self.check_guess(guess)
             self.show_results(results)
-            if results['good'] == 4:
+            if results['good'] == NUMBER_SIZE:
                 print('You win! Game over')
                 self.is_over = True
 
@@ -64,7 +65,7 @@ class CPUGuessingGame:
     def get_possible_permutations(self):
         """Gets a shuffled list of all possible valid permutations."""
         digits = [str(x) for x in range(10)]
-        result = list(itertools.permutations(digits, 4))
+        result = list(itertools.permutations(digits, NUMBER_SIZE))
         random.shuffle(result)
         return result
 
@@ -85,7 +86,7 @@ class CPUGuessingGame:
         while not self.is_over:
             guess = self.get_guess()
             results = self.check_guess(guess)
-            if results['good'] == 4:
+            if results['good'] == NUMBER_SIZE:
                 print('Game over')
                 self.is_over = True
             self.choices = [x for x in self.choices if calculate_score(x, guess) == results]

@@ -1,4 +1,5 @@
 """Provides validation functions."""
+from constants import NUMBER_SIZE
 
 
 def validate(provided_value=''):
@@ -15,8 +16,8 @@ def validate(provided_value=''):
     except ValueError:
         raise AssertionError('You must provide a number.')
 
-    assert len(provided_value) == 4, \
-        "Number should have 4 digits."
+    assert len(provided_value) == NUMBER_SIZE, \
+        "Number should have {} digits.".format(NUMBER_SIZE)
 
     assert all(provided_value.count(digit) == 1 for digit in provided_value), \
         "Digits shouldn't be repeated."

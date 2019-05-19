@@ -1,0 +1,1 @@
+NUMBER_SIZE = 4
