@@ -4,18 +4,19 @@ from validation import validate
 from constants import NUMBER_SIZE
 
 
-def calculate_score(guess, expected):
-    results = {'good': 0, 'regular': 0}
-    for guess_digit, expected_digit in zip(guess, expected):
-        if guess_digit == expected_digit:
-            results['good'] += 1
-        elif guess_digit in expected:
-            results['regular'] += 1
+class Game:
+    def calculate_score(self, guess, expected):
+        results = {'good': 0, 'regular': 0}
+        for guess_digit, expected_digit in zip(guess, expected):
+            if guess_digit == expected_digit:
+                results['good'] += 1
+            elif guess_digit in expected:
+                results['regular'] += 1
 
-    return results
+        return results
 
 
-class HumanGuessingGame:
+class HumanGuessingGame(Game):
     """Game where CPU generates a secret number and human tries to guess it."""
     def __init__(self):
         self.secret_value = self.get_secret_value()
@@ -33,7 +34,7 @@ class HumanGuessingGame:
 
     def check_guess(self, guess):
         """Checks whether the player's guess is correct."""
-        return calculate_score(guess, self.secret_value)
+        return self.calculate_score(guess, self.secret_value)
 
     def show_results(self, results):
         print('Good: {0}\nRegular: {1}\n'
@@ -55,7 +56,7 @@ class HumanGuessingGame:
                 break
 
 
-class CPUGuessingGame:
+class CPUGuessingGame(Game):
     def __init__(self):
         self.choices = self.get_possible_permutations()
 
@@ -86,7 +87,7 @@ class CPUGuessingGame:
                 print('Game over')
                 break
             self.choices = [x for x in self.choices
-                            if calculate_score(x, guess) == results]
+                            if self.calculate_score(x, guess) == results]
 
 
 if __name__ == '__main__':
