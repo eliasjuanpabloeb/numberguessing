@@ -18,7 +18,6 @@ def calculate_score(guess, expected):
 class HumanGuessingGame:
     """Game where CPU generates a secret number and human tries to guess it."""
     def __init__(self):
-        self.is_over = True
         self.secret_value = self.get_secret_value()
 
     def get_secret_value(self):
@@ -42,8 +41,7 @@ class HumanGuessingGame:
 
     def play(self):
         """Starts the game and checks if it finished."""
-        self.is_over = False
-        while not self.is_over:
+        while True:
             guess = self.get_guess()
             try:
                 validate(guess)
@@ -54,12 +52,11 @@ class HumanGuessingGame:
             self.show_results(results)
             if results['good'] == NUMBER_SIZE:
                 print('You win! Game over')
-                self.is_over = True
+                break
 
 
 class CPUGuessingGame:
     def __init__(self):
-        self.is_over = True
         self.choices = self.get_possible_permutations()
 
     def get_possible_permutations(self):
@@ -82,14 +79,14 @@ class CPUGuessingGame:
 
     def play(self):
         """Starts the game and checks if it finished."""
-        self.is_over = False
-        while not self.is_over:
+        while True:
             guess = self.get_guess()
             results = self.check_guess(guess)
             if results['good'] == NUMBER_SIZE:
                 print('Game over')
-                self.is_over = True
-            self.choices = [x for x in self.choices if calculate_score(x, guess) == results]
+                break
+            self.choices = [x for x in self.choices
+                            if calculate_score(x, guess) == results]
 
 
 if __name__ == '__main__':
