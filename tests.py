@@ -1,8 +1,9 @@
 from unittest import main, mock, TestCase
-from validation import validate
 from games import HumanGuessingGame, CPUGuessingGame
-from constants import NUMBER_SIZE
+from validation import validate
 
+
+# TODO: test Game.calculate_score
 
 class ValidationTests(TestCase):
     def test_validate(self):
@@ -60,13 +61,31 @@ class HumanGuessingGameTest(TestCase):
         result = self.game.check_guess('4321')
         self.assertEqual(result, {'good': 0, 'regular': 4})
 
-    @mock.patch('builtins.print')
-    @mock.patch('builtins.input', return_value='1234')
-    def test_play(self, mocked_input, mocked_print):
-        self.game.secret_value = '1234'
-        self.game.play()
+    def test_play_wins_on_first_try(self):
+        SECRET_VALUE = '1234'
+        self.game.secret_value = SECRET_VALUE
+        with mock.patch('builtins.input', return_value=SECRET_VALUE):
+            with mock.patch('builtins.print') as mocked_print:
+                self.game.play()
         mocked_print.assert_any_call('Good: 4\nRegular: 0\n')
         mocked_print.assert_any_call('You win! Game over')
+
+    def test_play_tries_different_numbers(self):
+        SECRET_VALUE = '1234'
+        self.game.secret_value = SECRET_VALUE
+        INPUT_VALUES = ['0123', '3120', '0124', '1234']
+        PRINT_CALLS = [
+            mock.call('Good: 0\nRegular: 3\n'),
+            mock.call('Good: 0\nRegular: 3\n'),
+            mock.call('Good: 1\nRegular: 2\n'),
+            mock.call('Good: 4\nRegular: 0\n'),
+            mock.call('You win! Game over'),
+        ]
+
+        with mock.patch('builtins.input', side_effect=INPUT_VALUES):
+            with mock.patch('builtins.print') as mocked_print:
+                self.game.play()
+        mocked_print.assert_has_calls(PRINT_CALLS)
 
 
 class CPUGuessingGameTest(TestCase):
@@ -89,7 +108,7 @@ class CPUGuessingGameTest(TestCase):
         self.assertEqual(result, {'good': 1, 'regular': 2})
 
     def test_play(self):
-        # TODO: use random seed to reproduce the same game 
+        # TODO: use random seed to reproduce the same game
         pass
 
 
