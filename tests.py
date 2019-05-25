@@ -1,9 +1,8 @@
+import random
 from unittest import main, mock, TestCase
 from games import HumanGuessingGame, CPUGuessingGame
 from validation import validate
 
-
-# TODO: test Game.calculate_score
 
 class ValidationTests(TestCase):
     def test_validate(self):
@@ -96,20 +95,37 @@ class CPUGuessingGameTest(TestCase):
         guess = self.game.get_guess()
         validate(guess)
 
-    @mock.patch('builtins.print')
-    @mock.patch('builtins.input', return_value='1,2')
-    def test_check_guess(self, mocked_input, mocked_print):
-        guess = self.game.get_guess()
-        result = self.game.check_guess(guess)
+    def test_check_guess(self):
+        HUMAN_ANSWER = '1,2'
 
+        with mock.patch('builtins.input', return_value=HUMAN_ANSWER) as mocked_input:
+            with mock.patch('builtins.print') as mocked_print:
+                guess = self.game.get_guess()
+                result = self.game.check_guess(guess)
         mocked_print.assert_called_with('My guess is {}'.format(guess))
         mocked_input.assert_called_with('Score: ')
 
         self.assertEqual(result, {'good': 1, 'regular': 2})
 
     def test_play(self):
-        # TODO: use random seed to reproduce the same game
-        pass
+        random.seed(123)
+        self.game.choices = self.game.get_possible_permutations()
+        INPUT_VALUES = ['1,3', '1,3', '0,4', '0,4', '0,4', '4,0']
+        PRINT_CALLS = [
+            mock.call('My guess is 0834'),
+            mock.call('My guess is 4803'),
+            mock.call('My guess is 8304'),
+            mock.call('My guess is 3840'),
+            mock.call('My guess is 0483'),
+            mock.call('My guess is 4038'),
+            mock.call('Game over'),
+        ]
+
+        with mock.patch('builtins.input', side_effect=INPUT_VALUES):
+            with mock.patch('builtins.print') as mocked_print:
+                self.game.play()
+
+        mocked_print.assert_has_calls(PRINT_CALLS)
 
 
 if __name__ == '__main__':

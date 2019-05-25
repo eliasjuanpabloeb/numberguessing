@@ -94,12 +94,13 @@ if __name__ == '__main__':
     game = None
     game_type = None
     message = """
-    Welcome to Guess The Number!
-    Please select a game mode:
-        [0] You guess the CPU's secret number.
-        [1] The CPU guesses yours.
+Welcome to Guess The Number!
+Please select a game mode:
+    [0] You guess the CPU's secret number.
+    [1] The CPU guesses yours.
 
-    Your choice: """
+Your choice:
+    """
 
     while game_type not in (0, 1):
         game_type = int(input(message))
