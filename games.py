@@ -6,6 +6,7 @@ from constants import NUMBER_SIZE
 
 class Game:
     def calculate_score(self, guess, expected):
+        """Calculates guess' score based on expected."""
         results = {'good': 0, 'regular': 0}
         for guess_digit, expected_digit in zip(guess, expected):
             if guess_digit == expected_digit:
@@ -33,12 +34,8 @@ class HumanGuessingGame(Game):
         return guess
 
     def check_guess(self, guess):
-        """Checks whether the player's guess is correct."""
+        """Returns the player's score."""
         return self.calculate_score(guess, self.secret_value)
-
-    def show_results(self, results):
-        print('Good: {0}\nRegular: {1}\n'
-              .format(results['good'], results['regular']))
 
     def play(self):
         """Starts the game and checks if it finished."""
@@ -50,7 +47,8 @@ class HumanGuessingGame(Game):
                 print('Oops! ', e.args[0])
                 continue
             results = self.check_guess(guess)
-            self.show_results(results)
+            print('Good: {0}\nRegular: {1}\n'
+                  .format(results['good'], results['regular']))
             if results['good'] == NUMBER_SIZE:
                 print('You win! Game over')
                 break
@@ -72,7 +70,7 @@ class CPUGuessingGame(Game):
         return ''.join(self.choices[0])
 
     def check_guess(self, guess):
-        """Asks the human the guess score."""
+        """Asks the human the CPU guess' score."""
         print('My guess is {}'.format(guess))
         response = input('Score: ')
         good, regular = [int(x) for x in response.split(',')]
